@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WeightAddWebAPI {
+namespace TestWebApplication {
     
     
     public partial class Default {

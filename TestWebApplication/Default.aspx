@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="WeightAddWebAPI.Default" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="TestWebApplication.Default" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Addition WebAPI Example</title>
+    <title>Weight Addition WebAPI Client</title>
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
@@ -43,8 +43,11 @@
     </style>
     <script>
         $(document).ready(function () {
-            addRow();
+            //addRow();
+            getUnit(2);
             $('.loader').hide();
+            $('#divMsg').hide();
+            $('#divErrorMsg').hide();
             unitSelect();
         });
 
@@ -53,61 +56,51 @@
         }
 
         function unitSelect() {
-            $('#unitSelect').append(getUnit());
+            getUnit(1);
         }
 
-        function addRow() {
+        function addRow(data) {
             var i = $('#tbl tbody tr').length;
+            var AddOption = '';
+            $.each(data.units, function (i, item) {
+                AddOption += '<option value="' + item + '">' + item + '</option>'
+            });
             var tableRow = '<tr>';
-            tableRow += '<td><input type="text" class="data form-control" name="ItemName[]" id="Value' + i + ' " placeholder="Value"></td>';
-            tableRow += '<td><select class="data form-control" id="Unit' + i + '">' + getUnit() + ' </select></td>';
+            tableRow += '<td><input type="text" class="data form-control decimal" id="Value' + i + ' " placeholder="Value"></td>';
+            tableRow += '<td><select class="data form-control" id="Unit' + i + '">' + AddOption + ' </select></td>';
             tableRow += '<td><button class="btn btn-dange" style="background-color:transparent;" onclick="Delete($(this))"> <i class="fa fa-trash-o"></i></button> </td>';
             tableRow += '</tr>';
             $('#tbl tbody').append(tableRow);
         }
 
-
-
-
-        function getUnit() {
-            $.ajax({
+        function getUnit(param) {
+            $.ajax("https://unitscalcwebapi.azurewebsites.net/api/GetUnits/GetUnit", {
                 type: "GET"
-                , url: "http://localhost:8080/api/GetUnits/GetUnit"
-               , dataType: "json"
-                , async: !1
-                , success: function (response) {
-                    //alert("Success: " + response);
-                    var AddOption = '';
-                    var data;
-                    var obj; //= JSON.parse(data);
-
-                    console.log(response);
-                    data = JSON.stringify(response);
-                    alert(data);
-                    //data = response;
-                    obj = JSON.parse(data);
-                    //alert(obj.units.length);
-                    //alert("FirstUnit:" + obj.units[0]);
-
-                    for (i = 0; i < obj.units.length; i++) {
-                        AddOption += '<option value="' + obj.units[i].toString() + '">' + obj.units[i].toString() + '</option>'
-                    }
-
-                    //alert(AddOption);
-                    return AddOption;
-
+                , dataType: "json"
+                , contentType: "application/json; charset=UTF-8"
+                //, data: JSON.stringify(abc)
+            }).done(function (data) {
+                if (param === 1) {
+                    bindDropdown(data);
                 }
-                , error: function (response) {
-                    alert(JSON.stringify(response));
+                else if (param === 2) {
+                    addRow(data);
                 }
-            })
-            
-            
-            //$.each(data, function (i, item) {
-            //    AddOption += '<option value="' + data[i].unit + '">' + data[i].unit + '</option>'
-            //});
-            //alert("AdOption:\n" + AddOption);
-            //return AddOption;
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
+                OnError(jqXHR, textStatus, errorThrown);
+            });
+            async: false
+        }
+
+        function bindDropdown(data) {
+            var AddOption = '';
+            $.each(data.units, function (i, item) {
+                AddOption += '<option value="' + item + '">' + item + '</option>'
+            });
+            $('#unitSelect').append(AddOption);
         }
 
         function submit() {
@@ -125,14 +118,13 @@
             }
             $('.loader').show();
             $('.Save').hide();
-
             var keys = []
                 , arrayObj = [];
-
-            $("table thead tr th").not(':last').each(function () {
-                keys.push($(this).html());
-            });
-
+            keys.push('value');
+            keys.push('unit');
+            //            $("table thead tr th").not(':last').each(function () {
+            //                keys.push($(this).html().toLowerCase());
+            //            });
             $("table tbody tr").each(function () {
                 var obj = {}
                     , i = 0;
@@ -142,32 +134,53 @@
                 })
                 arrayObj.push(obj);
             });
-            console.log(JSON.stringify({
-                items: arrayObj
-            }));
-
-            //You need to pass the Json Object and Extra parameter i.e. dropdown value in which the user want to see the result.
-
-
-            var UnitResult = $('#unitSelect').val();
-
-            $.ajax({
+            console.log(JSON.stringify(arrayObj));
+            var abc = {
+                "items": arrayObj
+            };
+            $.ajax("https://unitscalcwebapi.azurewebsites.net/api/Values/Calculate", {
                 type: "POST"
-                , url: "http://localhost:8080/api/Values/Calculate"
-                , data: JSON.stringify({
-                    items: arrayObj
-                })
-                , contentType: "application/json;charset=UTF-8"
                 , dataType: "json"
-                , success: function (response) {
-                    alert(response.d);
-                }
-                , error: function (response) {
-                    alert(response.d);
-                }
-            })
+                , contentType: "application/json; charset=UTF-8"
+                , data: JSON.stringify(abc)
+            }).done(function (data) {
+                OnSuccess(data);
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                //                a = jqXHR.responseText;
+                //                console.log(a);
+                //                console.log(textStatus);
+                //                console.log(errorThrown);
+                OnError(jqXHR, textStatus, errorThrown);
+            });
             $('.loader').hide();
             $('.Save').show();
+        }
+
+        function OnError(jqXHR, textStatus, errorThrown) {
+            var data = JSON.parse(jqXHR.responseText);
+            console.log(data);
+            $('#divErrorMsg').show();
+            //$('#lblErrorMsg').text("Status : "+textStatus + "\n Error : "+errorThrown);
+            $('#lblErrorMsg').text(data.Message);
+        }
+
+        function OnSuccess(data) {
+            var viewUnitsIn = $('#unitSelect').val();
+            var result = 0.00;
+            var response = data.Value;
+            if (viewUnitsIn.toLowerCase() == 'g') {
+                result = parseFloat(response / 1000.00).toFixed(6);
+            }
+            else if (viewUnitsIn.toLowerCase() == 'kg') {
+                result = parseFloat(response / 1000000.00).toFixed(6);
+            }
+            else {
+                result = parseFloat(response).toFixed(2);
+            }
+            $('#divErrorMsg').hide();
+            $('#lblErrorMsg').text("");
+            $('#divMsg').show();
+            $('#lblMsg').text(result + ' ' + viewUnitsIn);
         }
     </script>
 </head>
@@ -176,52 +189,21 @@
     <!-- Navigation -->
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="index.html">Unit Conversion</a>
+            <a class="navbar-brand" href="index.html">Weight Addition API Client</a>
             <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-            <!--
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item"> <a class="nav-link" href="about.html">About</a> </li>
-                    <li class="nav-item active"> <a class="nav-link" href="services.html">Services</a> </li>
-                    <li class="nav-item"> <a class="nav-link" href="contact.html">Contact</a> </li>
-                    <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownPortfolio" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Portfolio
-            </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownPortfolio"> <a class="dropdown-item" href="portfolio-1-col.html">1 Column Portfolio</a> <a class="dropdown-item" href="portfolio-2-col.html">2 Column Portfolio</a> <a class="dropdown-item" href="portfolio-3-col.html">3 Column Portfolio</a> <a class="dropdown-item" href="portfolio-4-col.html">4 Column Portfolio</a> <a class="dropdown-item" href="portfolio-item.html">Single Portfolio Item</a> </div>
-                    </li>
-                    <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownBlog" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Blog
-            </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownBlog"> <a class="dropdown-item" href="blog-home-1.html">Blog Home 1</a> <a class="dropdown-item" href="blog-home-2.html">Blog Home 2</a> <a class="dropdown-item" href="blog-post.html">Blog Post</a> </div>
-                    </li>
-                    <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownBlog" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Other Pages
-            </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownBlog"> <a class="dropdown-item" href="full-width.html">Full Width Page</a> <a class="dropdown-item" href="sidebar.html">Sidebar Page</a> <a class="dropdown-item" href="faq.html">FAQ</a> <a class="dropdown-item" href="404.html">404</a> <a class="dropdown-item" href="pricing.html">Pricing Table</a> </div>
-                    </li>
-                </ul>
-            </div>
--->
         </div>
     </nav>
     <!-- Page Content -->
     <div class="container">
         <!-- Page Heading/Breadcrumbs -->
-        <h3 class="mt-4 mb-3">
-            <small>Please enter the details</small>
-        </h3>
-
-        <!--
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item">
-                <a href="index.html">Home</a>
-              </li>
-              <li class="breadcrumb-item active">Services</li>
-            </ol>
-        -->
-        <!-- Image Header -->
-        <!--    <img class="img-fluid rounded mb-4" src="http://placehold.it/1200x300" alt="">-->
-        <!-- Marketing Icons Section -->
+        <!-- Page Heading/Breadcrumbs -->
+        <h5 class="mt-4 mb-3">
+            <small><span>Enter data by entering values(numbers), selecting respective units, and clicking "Add". You can add as many rows.
+                        <br />
+                Once done, click on the "Perform Addition" button to get a sum of all values. You can also select the unit in which you would like to see the total sum of all values. 
+            </span>
+            </small>
+        </h5>
         <div class="row">
             <table class="table table-bordered" style="width: 100%" id="tbl">
                 <thead>
@@ -234,22 +216,18 @@
                 <tbody></tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="3">
-                            <a href="#" class="btn" title="Add new row" onclick="addRow()"><i class="fa fa-plus"></i>Add Row</a>
-                            <!--<button class="btn" style="background-color:transparent;" onclick="addRow()"><i class="fa fa-plus"></i> Add Row</button>-->
-                            <!--<input type="button" value="Add Row" class="btn btn-success" onclick="addRow()"> </td>-->
+                        <td colspan="3"><a href="#" class="btn" title="Add new row" onclick="getUnit(2)"><i class="fa fa-plus"></i>Add Row</a>
                     </tr>
                 </tfoot>
             </table>
             <br>
-            <!--<input type="button" value="Submit" class="btn btn-info" onclick="submit()"> </body>-->
         </div>
-        <div class="row">
-            <div class="col-sm-4">Please select the result type from dropdown</div>
+        <div class="row" style="padding-top: 15px; width:40%">
+            <div class="col-sm-4">Show results in:</div>
             <div class="col-sm-3">
                 <select class="data form-control" id="unitSelect"></select>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-3" >
                 <a href="#" class="btn btn-info" id="Save" title="Submit" onclick="submit()"><i class="fa fa-floppy-o"></i>Submit</a>
                 <!--<button class="btn btn-success" id="Save" onclick="submit()"> <i class="fa fa-floppy-o"></i> Submit</button>-->
             </div>
@@ -257,5 +235,22 @@
                 <div class="loader">Loading...</div>
             </div>
         </div>
+        <div class="row" id="divMsg" style="padding-top: 15px;">
+            <br />
+            <br />
+            <label>The Result is <strong><span id="lblMsg"></span></strong></label>
+        </div>
+
+        <div class="row" style="padding-top: 15px;">
+            <small><span>The results are shown upto 6 decimal places to ensure the smallest units are included when displayed in the results. </span></small>            
+        </div>
+        <div class="row" id="divErrorMsg" style="color: red; font-weight: normal;">
+            <strong><span id="lblErrorMsg"></span></strong>
+        </div>
+        <div style="padding-top: 15px;">
+            <p><a class="btn btn-default" href="https://testweightaddapi.azurewebsites.net/default2">Check out the C#/Code Behind Implementation... &raquo;</a></p>
+        </div>
         <!-- /.row -->
     </div>
+</body>
+</html>

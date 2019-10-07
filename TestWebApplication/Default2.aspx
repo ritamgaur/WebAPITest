@@ -1,4 +1,5 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default2.aspx.cs" Inherits="WebApplication2.Default2" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default2.aspx.cs" Inherits="TestWebApplication.Default2" %>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Addition WebAPI Example</title>
+    <title>Weight Addition WebAPI Client</title>
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
     <!--        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
@@ -49,7 +50,7 @@
     <form id="form" runat="server">
         <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
             <div class="container">
-                <a class="navbar-brand" href="index.html">Unit Conversion</a>
+                <a class="navbar-brand" href="index.html">Weight Addition WebAPI Client</a>
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
 
             </div>
@@ -58,10 +59,9 @@
         <div class="container">
             <!-- Page Heading/Breadcrumbs -->
             <h5 class="mt-4 mb-3">
-                <small><span>
-                    Enter data by entering values(numbers), selecting respective units, and clicking "Add". You can add as many rows.
+                <small><span>Enter data by entering values(numbers), selecting respective units, and clicking "Add". You can add as many rows.
                         <br />
-                        Once done, click on the "Perform Addition" button to get a sum of all values. You can also select the unit in which you would like to see the total sum of all values.
+                    Once done, click on the "Perform Addition" button to get a sum of all values. You can also select the unit in which you would like to see the total sum of all values. 
                 </span>
                 </small>
             </h5>
@@ -72,7 +72,7 @@
                     <div class="input-group">
                         <span class="input-group"></span>
                         <asp:TextBox ID="txtvalues" runat="server" CssClass="form-control" TextMode="Number"></asp:TextBox>
-                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="Value is required" ControlToValidate="txtvalues"></asp:RequiredFieldValidator>
+                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="Invalid/Blank Value" ControlToValidate="txtvalues" ForeColor="Red"></asp:RequiredFieldValidator>
                     </div>
                 </div>
                 <div class="col-sm-3 form-group">
@@ -82,7 +82,7 @@
                         <asp:DropDownList ID="ddlunits" runat="server" CssClass="form-control"></asp:DropDownList>
                     </div>
                 </div>
-                <div class="col-sm-3 form-group" style="padding-top: 5px;">
+                <div class="col-sm-3 form-group">
                     <label></label>
                     <div class="input-group">
                         <asp:Button ID="btnadd" runat="server" Text="Add" CssClass="btn-success" OnClick="btnadd_Click" />
@@ -119,12 +119,16 @@
             </div>
 
             <div class="col-sm-3 form-group">
-                
+
                 <div class="input-group">
                     <asp:Label runat="server" ID="lblResult" Visible="false" Font-Bold="true"></asp:Label>
-
+                    <small><span>
+                        <br />
+                        The results are shown upto 6 decimal places to ensure the smallest units are included when displayed in the results. </span></small>
                 </div>
+                
             </div>
+            <p><a class="btn btn-default" href="https://testweightaddapi.azurewebsites.net/default">Check out the JQuery/Client side Implementation... &raquo;</a></p>
         </div>
     </form>
 </body>

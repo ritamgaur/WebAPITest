@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -11,25 +12,21 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace WebApplication2
+namespace TestWebApplication
 {
     public partial class Default2 : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            
             if (!IsPostBack)
             {
                 GetAndLoadUnitData();
-            }
-            
+            }   
         }
-
 
         public void GetAndLoadUnitData()
         {
-            //var request = (HttpWebRequest)WebRequest.Create("http://localhost:55167/api/GetUnits/GetUnit");
-            var request = (HttpWebRequest)WebRequest.Create("https://unitscalcwebapi.azurewebsites.net/api/GetUnits/GetUnit");
+            var request = (HttpWebRequest)WebRequest.Create(ConfigurationManager.AppSettings.Get("APIEndpointBaseURL") + "GetUnits/GetUnit");
             request.Method = "GET";
             request.ContentType = "application/json";
             var response = (HttpWebResponse)request.GetResponse();
@@ -157,15 +154,15 @@ namespace WebApplication2
             switch(ddlResultUnits.SelectedValue)
                 {
                     case "Kg":
-                        this.lblResult.Text = "The total is: " + (sum/1000000).ToString("N3") + " Kg";
+                        this.lblResult.Text = "The total is: " + (sum/1000000).ToString("N6") + " Kg";
                         break;
 
                     case "g":
-                        this.lblResult.Text = "The total is: " + (sum / 1000).ToString("N3") + " g";
+                        this.lblResult.Text = "The total is: " + (sum / 1000).ToString("N6") + " g";
                         break;
 
                     case "mg":
-                        this.lblResult.Text = "The total is: " + sum.ToString("N3") + " mg";
+                        this.lblResult.Text = "The total is: " + sum.ToString("N6") + " mg";
                         break;
 
                 }
@@ -183,7 +180,7 @@ namespace WebApplication2
         /// <returns></returns>
         public string Submitdata(string requestJSON)
         {
-            var request = (HttpWebRequest)WebRequest.Create("https://unitscalcwebapi.azurewebsites.net/api/Values/Calculate");
+            var request = (HttpWebRequest)WebRequest.Create(ConfigurationManager.AppSettings.Get("APIEndpointBaseURL") + "Values/Calculate");
             // var postData = "{\"items\":[{\"Value\":1000,\"Unit\":\"KG\"}]}";
             var data = Encoding.ASCII.GetBytes(requestJSON);
             request.Method = "POST";

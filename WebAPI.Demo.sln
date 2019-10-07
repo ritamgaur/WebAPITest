@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29209.62
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWebApplication", "TestWebApplication\TestWebApplication.csproj", "{AE001EDC-0A39-41D0-9A64-7DED55D5D78A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeightAddWebAPI", "WeightAddWebAPI\WeightAddWebAPI.csproj", "{2C114C35-EC1B-4A17-A2F4-A260127FBFD5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AE001EDC-0A39-41D0-9A64-7DED55D5D78A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE001EDC-0A39-41D0-9A64-7DED55D5D78A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE001EDC-0A39-41D0-9A64-7DED55D5D78A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE001EDC-0A39-41D0-9A64-7DED55D5D78A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C114C35-EC1B-4A17-A2F4-A260127FBFD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C114C35-EC1B-4A17-A2F4-A260127FBFD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C114C35-EC1B-4A17-A2F4-A260127FBFD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C114C35-EC1B-4A17-A2F4-A260127FBFD5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6E54D28E-DA5C-4BB8-89E8-6E009D436369}
+	EndGlobalSection
+EndGlobal

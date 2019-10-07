@@ -198,7 +198,7 @@
         <!-- Page Heading/Breadcrumbs -->
         <!-- Page Heading/Breadcrumbs -->
         <h5 class="mt-4 mb-3">
-            <small><span>Enter data by entering values(numbers), selecting respective units, and clicking "Add". You can add as many rows.
+            <small><span>Enter data by entering values(numbers), selecting respective units. You can add additional rows by clicking "Add Row". You can add as many rows as needed.
                         <br />
                 Once done, click on the "Perform Addition" button to get a sum of all values. You can also select the unit in which you would like to see the total sum of all values. 
             </span>
@@ -222,13 +222,13 @@
             </table>
             <br>
         </div>
-        <div class="row" style="padding-top: 15px; width:40%">
+        <div class="row" style="padding-top: 15px; width:50%">
             <div class="col-sm-4">Show results in:</div>
             <div class="col-sm-3">
                 <select class="data form-control" id="unitSelect"></select>
             </div>
             <div class="col-sm-3" >
-                <a href="#" class="btn btn-info" id="Save" title="Submit" onclick="submit()"><i class="fa fa-floppy-o"></i>Submit</a>
+                <a href="#" class="btn btn-info" id="Save" title="Submit" onclick="submit()"><i class="fa fa-floppy-o"></i>Perform Addition</a>
                 <!--<button class="btn btn-success" id="Save" onclick="submit()"> <i class="fa fa-floppy-o"></i> Submit</button>-->
             </div>
             <div class="col-sm-2">

@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 
-namespace WebApplication1.Validators
+namespace WeightAddWebAPI.Validators
 {
     /// <summary>
-    /// This is a custom validation attribute that will raise validation errors if an int is negative.
+    /// This is a custom validation attribute that will raise validation errors if an invalid unit value is received by the API.
     /// </summary>
     public class ValidUnitAttribute : ValidationAttribute
     {

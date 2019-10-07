@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
-using WebApplication1.Validators;
+using WeightAddWebAPI.Validators;
 
-namespace WebApplication1.Models
+namespace WeightAddWebAPI.Models
 {
     public class RootObject
     {

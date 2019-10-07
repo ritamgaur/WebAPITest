@@ -5,12 +5,14 @@ using System.Net.Http;
 using System.Text;
 using System.Web.Http;
 using System.Web.Http.Cors;
-using WebApplication1.App_Code;
-using WebApplication1.Models;
+using WeightAddWebAPI.App_Code;
+using WeightAddWebAPI.Models;
 
-namespace WebApplication1.Controllers
+namespace WeightAddWebAPI.Controllers
 {
-    //[EnableCors(origins: "http://localhost:57630", headers: "*", methods: "*")]
+    /// <summary>
+    /// The 
+    /// </summary>    
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class ValuesController : ApiController
     {

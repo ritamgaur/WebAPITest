@@ -5,10 +5,13 @@ using System.Net.Http;
 using System.Text;
 using System.Web.Http;
 using System.Web.Http.Cors;
-using WebApplication1.App_Code;
+using WeightAddWebAPI.App_Code;
 
-namespace WebApplication1.Controllers
+namespace WeightAddWebAPI.Controllers
 {
+    /// <summary>
+    /// This controller return the master values of various Units supported by the API.
+    /// </summary>
     public class GetUnitsController : ApiController
     {
         #region Response constants

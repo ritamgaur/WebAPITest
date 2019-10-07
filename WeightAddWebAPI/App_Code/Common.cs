@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 
-namespace WebApplication1.App_Code
+namespace WeightAddWebAPI.App_Code
 {
     public class Common
     {

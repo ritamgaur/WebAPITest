@@ -21,4 +21,4 @@ https://testweightaddapi.azurewebsites.net/default2
 https://testweightaddapi.azurewebsites.net/default
 
 #### Important Note:
-The WEB API currently does not implement any security features, and has been configured to allow all source URLs within the CORS settings.
+The WEB API currently does not implement any authentication/security features, and has been configured to allow all source URLs within the CORS settings.
